@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>K-Pop Runway — Style & Shine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a12;
+    --surface: #12121e;
+    --surface2: #1a1a2e;
+    --gold: #e8c97a;
+    --gold2: #f5e0a0;
+    --pink: #f472b6;
+    --violet: #a78bfa;
+    --mint: #6ee7b7;
+    --white: #f8f4ff;
+    --muted: #6b6b8a;
+    --border: rgba(232,201,122,0.18);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* STARFIELD */
+  #starfield {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse at 60% 0%, #1a0a2e 0%, #0a0a12 60%);
+  }
+  .star {
+    position: absolute; border-radius: 50%; background: #fff;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle { 0%,100%{opacity:.2} 50%{opacity:.9} }
+
+  /* LAYOUT */
+  .app { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    text-align: center; padding: 2rem 1rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-tag {
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 8px; opacity: 0.8;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 40%, var(--pink) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1.1; margin-bottom: 4px;
+  }
+  header p {
+    font-size: 13px; color: var(--muted); letter-spacing: 1px;
+    font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 18px;
+  }
+
+  /* IDOL SELECTOR */
+  .idol-tabs {
+    display: flex; justify-content: center; gap: 12px; padding: 1.2rem 1rem 0.5rem; flex-wrap: wrap;
+  }
+  .idol-tab {
+    padding: 8px 20px; border-radius: 30px;
+    border: 1.5px solid var(--border); background: transparent;
+    color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .25s; letter-spacing: 0.5px;
+  }
+  .idol-tab.active {
+    border-color: var(--gold); color: var(--gold);
+    background: rgba(232,201,122,0.09);
+    box-shadow: 0 0 18px rgba(232,201,122,0.15);
+  }
+  .idol-tab:hover:not(.active) { border-color: var(--muted); color: var(--white); }
+
+  /* MAIN STAGE */
+  .stage-area {
+    display: flex; gap: 0; flex: 1;
+    padding: 0.5rem 1.5rem 1rem; max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+
+  /* RUNWAY */
+  .runway-wrap {
+    flex: 1; display: flex; flex-direction: column; align-items: center; position: relative;
+  }
+  .runway {
+    width: 340px; height: 580px; position: relative;
+    background: linear-gradient(180deg, #1a0a2e 0%, #0f0f1f 50%, #18102e 100%);
+    border-radius: 18px; overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 60px rgba(167,139,250,0.12), inset 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  /* Runway floor lines */
+  .runway-floor {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 180px;
+    overflow: hidden;
+  }
+  .runway-floor::before {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent, transparent 28px,
+      rgba(232,201,122,0.07) 28px, rgba(232,201,122,0.07) 30px
+    );
+  }
+  /* Perspective lines */
+  .floor-line {
+    position: absolute; bottom: 0; width: 1px; background: rgba(232,201,122,0.15);
+    transform-origin: bottom center;
+  }
+
+  /* Stage lights */
+  .stage-light {
+    position: absolute; top: -20px; width: 120px; height: 260px;
+    border-radius: 50%; opacity: 0.18; pointer-events: none;
+    animation: lightSway 4s ease-in-out infinite;
+  }
+  .stage-light.left { left: 0; background: radial-gradient(ellipse, var(--violet) 0%, transparent 70%); animation-delay: -2s; }
+  .stage-light.right { right: 0; background: radial-gradient(ellipse, var(--pink) 0%, transparent 70%); }
+  @keyframes lightSway { 0%,100%{opacity:.18} 50%{opacity:.28} }
+
+  /* Spotlight on idol */
+  .spotlight {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 420px; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 10%, rgba(255,255,220,0.1) 0%, transparent 70%);
+    animation: spotPulse 3s ease-in-out infinite;
+  }
+  @keyframes spotPulse { 0%,100%{opacity:.8} 50%{opacity:1} }
+
+  /* IDOL CHARACTER */
+  .idol-stage {
+    position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+    width: 160px; display: flex; flex-direction: column; align-items: center;
+  }
+  .idol-figure {
+    width: 130px; height: 320px; position: relative;
+    transition: all 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  /* Walking animation */
+  .idol-figure.walking { animation: walk 0.7s ease-in-out infinite alternate; }
+  @keyframes walk {
+    0% { transform: translateY(0) rotate(-1deg); }
+    100% { transform: translateY(-8px) rotate(1deg); }
+  }
+
+  /* Photo flash */
+  .flash-overlay {
+    position: absolute; inset: 0; background: white; opacity: 0;
+    pointer-events: none; z-index: 20; border-radius: 18px;
+    transition: opacity 0.05s;
+  }
+  .flash-overlay.flash { animation: flashAnim 0.5s forwards; }
+  @keyframes flashAnim { 0%{opacity:.9} 100%{opacity:0} }
+
+  /* NAME TAG */
+  .idol-name-tag {
+    margin-top: 8px; font-family: 'Playfair Display', serif;
+    font-size: 15px; color: var(--gold); letter-spacing: 1px;
+  }
+  .idol-group-tag {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-top: 2px;
+  }
+
+  /* SCORE DISPLAY */
+  .score-bar {
+    position: absolute; top: 12px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 14px;
+  }
+  .score-pill {
+    font-size: 11px; letter-spacing: 1px; color: var(--gold);
+    background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 20px;
+  }
+
+  /* RUNWAY CONTROLS */
+  .runway-controls {
+    display: flex; gap: 10px; margin-top: 14px; justify-content: center; flex-wrap: wrap;
+  }
+  .btn {
+    padding: 9px 20px; border-radius: 30px; border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.04); color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .2s; letter-spacing: 0.5px;
+  }
+  .btn:hover { background: rgba(255,255,255,0.08); border-color: var(--gold); color: var(--gold); }
+  .btn.accent {
+    background: linear-gradient(135deg, rgba(244,114,182,0.3), rgba(167,139,250,0.3));
+    border-color: var(--pink); color: var(--gold2);
+  }
+  .btn.accent:hover { background: linear-gradient(135deg, rgba(244,114,182,0.5), rgba(167,139,250,0.5)); }
+  .btn.photo-btn {
+    background: linear-gradient(135deg, rgba(232,201,122,0.25), rgba(245,224,160,0.15));
+    border-color: var(--gold); color: var(--gold);
+    animation: photoBtnPulse 2s ease-in-out infinite;
+  }
+  @keyframes photoBtnPulse { 0%,100%{box-shadow:0 0 0 rgba(232,201,122,0)} 50%{box-shadow:0 0 16px rgba(232,201,122,0.4)} }
+
+  /* OUTFIT PANEL */
+  .outfit-panel {
+    width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px;
+    padding-left: 1.5rem;
+  }
+  .panel-title {
+    font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 400;
+    color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+
+  .outfit-category { display: flex; flex-direction: column; gap: 6px; }
+  .category-label {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 2px;
+  }
+  .outfit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .outfit-chip {
+    aspect-ratio: 1; border-radius: 10px; border: 1.5px solid var(--border);
+    background: var(--surface2); cursor: pointer; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    transition: all .2s; position: relative; overflow: hidden;
+    font-size: 20px;
+  }
+  .outfit-chip span.chip-label {
+    font-size: 8px; letter-spacing: 0.5px; color: var(--muted); font-weight: 500;
+    text-align: center; line-height: 1.1; padding: 0 2px;
+  }
+  .outfit-chip:hover { border-color: var(--violet); transform: scale(1.06); }
+  .outfit-chip.selected { border-color: var(--gold); background: rgba(232,201,122,0.12); box-shadow: 0 0 12px rgba(232,201,122,0.25); }
+  .outfit-chip.selected::after {
+    content: '✓'; position: absolute; top: 2px; right: 4px;
+    font-size: 8px; color: var(--gold); font-weight: 700;
+  }
+
+  /* COLOR SWATCHES */
+  .color-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .color-swatch {
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+    border: 2px solid transparent; transition: all .2s;
+  }
+  .color-swatch:hover { transform: scale(1.15); }
+  .color-swatch.selected { border-color: var(--white); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
+
+  /* PHOTO GALLERY */
+  .gallery-area {
+    max-width: 1200px; margin: 0 auto; width: 100%; padding: 0 1.5rem 2rem;
+  }
+  .gallery-title {
+    font-family: 'Playfair Display', serif; font-size: 16px; color: var(--gold);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    border-top: 1px solid var(--border); padding-top: 14px;
+  }
+  .gallery-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+  .gallery-thumb {
+    width: 120px; height: 160px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--surface2);
+    overflow: hidden; position: relative; cursor: pointer;
+    transition: all .2s;
+  }
+  .gallery-thumb:hover { border-color: var(--gold); transform: scale(1.04); }
+  .gallery-thumb canvas { width: 100%; height: 100%; display: block; }
+  .gallery-thumb .photo-label {
+    position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7);
+    font-size: 9px; color: var(--gold); letter-spacing: 1px; text-align: center;
+    padding: 4px; text-transform: uppercase;
+  }
+  .gallery-empty {
+    font-size: 13px; color: var(--muted); font-style: italic;
+    padding: 12px 0;
+  }
+
+  /* Reaction popups */
+  .reaction {
+    position: absolute; pointer-events: none; font-size: 22px; z-index: 30;
+    animation: reactAnim 1.5s forwards;
+  }
+  @keyframes reactAnim {
+    0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-80px) scale(1.4)}
+  }
+
+  /* Audience flash */
+  .audience-bar {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 50px;
+    background: linear-gradient(180deg, transparent, rgba(167,139,250,0.08));
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    overflow: hidden;
+  }
+  .audience-person {
+    width: 8px; height: 14px; border-radius: 4px 4px 2px 2px;
+    background: rgba(255,255,255,0.12); position: relative;
+  }
+  .audience-flash { animation: aud 1.5s ease-in-out infinite; }
+  @keyframes aud { 0%,100%{background:rgba(255,255,255,0.12)} 50%{background:rgba(232,201,122,0.5)} }
+
+  /* SVG idol renderer */
+  #idol-svg { width: 130px; height: 320px; }
+</style>
+</head>
+<body>
+<div id="starfield"></div>
+<div class="app">
+  <header>
+    <p class="logo-tag">★ K-Fashion Runway ★</p>
+    <h1>Style &amp; Shine</h1>
+    <p><em>Where K-Pop meets Haute Couture</em></p>
+  </header>
+
+  <!-- IDOL SELECTOR -->
+  <div class="idol-tabs" id="idol-tabs"></div>
+
+  <!-- STAGE + OUTFIT -->
+  <div class="stage-area">
+    <div class="runway-wrap">
+      <div class="runway" id="runway">
+        <div class="stage-light left"></div>
+        <div class="stage-light right"></div>
+        <div class="spotlight"></div>
+
+        <div class="score-bar">
+          <div class="score-pill" id="style-score">✦ Style: 0</div>
+          <div class="score-pill" id="photo-count">📷 0 Photos</div>
+        </div>
+
+        <div class="idol-stage">
+          <div class="idol-figure" id="idol-figure">
+            <svg id="idol-svg" viewBox="0 0 130 320" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div class="idol-name-tag" id="idol-name">Minji</div>
+          <div class="idol-group-tag" id="idol-group">NewJeans</div>
+        </div>
+
+        <div class="runway-floor" id="runway-floor">
+          <svg width="340" height="180" style="position:absolute;bottom:0;left:0">
+            <defs>
+              <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(232,201,122,0.05)"/>
+                <stop offset="100%" stop-color="rgba(232,201,122,0.15)"/>
+              </linearGradient>
+            </defs>
+            <rect width="340" height="180" fill="url(#floorGrad)"/>
+            <!-- Perspective lines -->
+            <line x1="170" y1="0" x2="0" y2="180" stroke="rgba(232,201,122,0.12)" stroke-width="1"/>
+            <line x1="170" y1="0" x2="60" y2="180" stroke="rgba(232,201,122,0.08)" stroke-width="1"/>
+            <line x1="170" y1="0" x2="120" y2="180" stroke="rgba(232,201,122,0.06)" stroke-width="1"/>
+            <line x1="170" y1="0" x2="340" y2="180" stroke="rgba(232,201,122,0.12)" stroke-width="1"/>
+            <line x1="170" y1="0" x2="280" y2="180" stroke="rgba(232,201,122,0.08)" stroke-width="1"/>
+            <line x1="170" y1="0" x2="220" y2="180" stroke="rgba(232,201,122,0.06)" stroke-width="1"/>
+            <!-- Horizontal lines -->
+            <line x1="0" y1="60" x2="340" y2="60" stroke="rgba(232,201,122,0.06)" stroke-width="0.5"/>
+            <line x1="0" y1="110" x2="340" y2="110" stroke="rgba(232,201,122,0.06)" stroke-width="0.5"/>
+            <line x1="0" y1="150" x2="340" y2="150" stroke="rgba(232,201,122,0.08)" stroke-width="0.5"/>
+          </svg>
+        </div>
+
+        <div class="audience-bar" id="audience-bar"></div>
+        <div class="flash-overlay" id="flash-overlay"></div>
+      </div>
+
+      <div class="runway-controls">
+        <button class="btn" id="walk-btn" onclick="toggleWalk()">▶ Walk the Runway</button>
+        <button class="btn accent" onclick="spinIdol()">✦ Pose</button>
+        <button class="btn photo-btn" onclick="takePhoto()">📷 Snap Photo</button>
+      </div>
+    </div>
+
+    <!-- OUTFIT PANEL -->
+    <div class="outfit-panel">
+      <div class="panel-title">Wardrobe</div>
+
+      <div class="outfit-category">
+        <div class="category-label">Top / Outfit</div>
+        <div class="outfit-grid" id="top-grid"></div>
+      </div>
+      <div class="outfit-category">
+        <div class="category-label">Bottoms</div>
+        <div class="outfit-grid" id="bottom-grid"></div>
+      </div>
+      <div class="outfit-category">
+        <div class="category-label">Accessories</div>
+        <div class="outfit-grid" id="acc-grid"></div>
+      </div>
+      <div class="outfit-category">
+        <div class="category-label">Color Palette</div>
+        <div class="color-row" id="color-row"></div>
+      </div>
+
+      <div class="panel-title" style="margin-top:4px">Mood Score</div>
+      <div style="font-size:28px;letter-spacing:4px;color:var(--gold)" id="star-display">☆☆☆☆☆</div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery-area">
+    <div class="gallery-title">📸 Look Book</div>
+    <div class="gallery-grid" id="gallery-grid">
+      <div class="gallery-empty">No photos yet — walk the runway and snap your best look!</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// STARFIELD
+const sf = document.getElementById('starfield');
+for(let i=0;i<80;i++){
+  const s=document.createElement('div'); s.className='star';
+  const sz=Math.random()*2.5+0.5;
+  s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:-${Math.random()*5}s`;
+  sf.appendChild(s);
+}
+
+// DATA
+const IDOLS = [
+  { name:'Minji',     group:'NewJeans', skin:'#f5c9a0', hair:'#2a1a0e', hairStyle:'long',     male:false },
+  { name:'Hanni',     group:'NewJeans', skin:'#e8b98a', hair:'#1a0a0a', hairStyle:'medium',   male:false },
+  { name:'Danielle',  group:'NewJeans', skin:'#f0c8b0', hair:'#3d1a00', hairStyle:'wavy',     male:false },
+  { name:'Haerin',    group:'NewJeans', skin:'#f2c4a2', hair:'#0a0a0a', hairStyle:'straight', male:false },
+  { name:'Hyein',     group:'NewJeans', skin:'#f8d8c0', hair:'#222222', hairStyle:'pigtails', male:false },
+  { name:'James',     group:'CORTIS',   skin:'#f2c8a8', hair:'#1a1a1a', hairStyle:'m_short',  male:true  },
+  { name:'Keonho',    group:'CORTIS',   skin:'#efc0a0', hair:'#0a0a0a', hairStyle:'m_medium', male:true  },
+  { name:'Martin',    group:'CORTIS',   skin:'#f5cdb0', hair:'#2a1500', hairStyle:'m_wavy',   male:true  },
+  { name:'Juhoon',    group:'CORTIS',   skin:'#f0c4a2', hair:'#111111', hairStyle:'m_curtain',male:true  },
+  { name:'Seonghyeon',group:'CORTIS',   skin:'#f8d0b8', hair:'#222222', hairStyle:'m_slick',  male:true  },
+];
+
+const TOPS = [
+  {emoji:'👗', label:'Mini Dress', id:'minidress', scoreBonus:3, femaleOnly:true},
+  {emoji:'👘', label:'Hanbok Fusion', id:'hanbok', scoreBonus:5, femaleOnly:false},
+  {emoji:'🧥', label:'Suit Jacket', id:'suit', scoreBonus:5, maleOnly:true},
+  {emoji:'🩱', label:'Bodysuit', id:'bodysuit', scoreBonus:2, femaleOnly:false},
+  {emoji:'🦋', label:'Statement Top', id:'butterfly', scoreBonus:4, femaleOnly:false},
+  {emoji:'💎', label:'Crystal Outfit', id:'gown', scoreBonus:6, femaleOnly:false},
+];
+const BOTTOMS = [
+  {emoji:'🩳', label:'Mini Skirt', id:'miniskirt', scoreBonus:2, femaleOnly:true},
+  {emoji:'👖', label:'Wide Pants', id:'widepants', scoreBonus:2},
+  {emoji:'🌸', label:'Floral Skirt', id:'floralskirt', scoreBonus:3, femaleOnly:true},
+  {emoji:'⚫', label:'Leather Pants', id:'leather', scoreBonus:3},
+  {emoji:'🌊', label:'Maxi Pants', id:'maxiskirt', scoreBonus:4},
+  {emoji:'🎽', label:'Cargo Pants', id:'cargo', scoreBonus:3, maleOnly:true},
+];
+const ACCS = [
+  {emoji:'👑', label:'Crown', id:'crown', scoreBonus:4},
+  {emoji:'🌸', label:'Flower Pin', id:'flowers', scoreBonus:3},
+  {emoji:'💍', label:'Jewels', id:'jewels', scoreBonus:3},
+  {emoji:'🕶️', label:'Shades', id:'shades', scoreBonus:2},
+  {emoji:'🎀', label:'Ribbon', id:'bow', scoreBonus:2},
+  {emoji:'🌟', label:'Star Pins', id:'starpins', scoreBonus:3},
+];
+const COLORS = [
+  {hex:'#f472b6', name:'Rose Pink'},
+  {hex:'#a78bfa', name:'Lavender'},
+  {hex:'#6ee7b7', name:'Mint'},
+  {hex:'#fbbf24', name:'Gold'},
+  {hex:'#f87171', name:'Coral'},
+  {hex:'#60a5fa', name:'Sky Blue'},
+  {hex:'#ffffff', name:'Snow White'},
+  {hex:'#1e1b4b', name:'Midnight'},
+  {hex:'#064e3b', name:'Forest'},
+  {hex:'#7f1d1d', name:'Deep Red'},
+];
+
+let state = {
+  idol: 0,
+  top: 'minidress',
+  bottom: 'widepants',
+  acc: 'flowers',
+  color: '#f472b6',
+  walking: false,
+  score: 0,
+  photos: [],
+  photoCount: 0,
+  stars: 0,
+};
+
+// BUILD TABS
+const idolTabsEl = document.getElementById('idol-tabs');
+IDOLS.forEach((idol, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'idol-tab' + (i===0?' active':'');
+  btn.textContent = `${idol.name} · ${idol.group}`;
+  btn.onclick = () => selectIdol(i);
+  idolTabsEl.appendChild(btn);
+});
+
+// BUILD OUTFIT GRIDS
+function buildGrid(items, containerId, category) {
+  const grid = document.getElementById(containerId);
+  grid.innerHTML = '';
+  items.forEach(item => {
+    const chip = document.createElement('div');
+    chip.className = 'outfit-chip' + (state[category]===item.id?' selected':'');
+    chip.innerHTML = `<span style="font-size:22px">${item.emoji}</span><span class="chip-label">${item.label}</span>`;
+    chip.onclick = () => selectOutfit(category, item.id, grid, chip);
+    chip.dataset.id = item.id;
+    grid.appendChild(chip);
+  });
+}
+
+function buildColors() {
+  const row = document.getElementById('color-row');
+  row.innerHTML = '';
+  COLORS.forEach(c => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (state.color===c.hex?' selected':'');
+    sw.style.background = c.hex;
+    sw.title = c.name;
+    sw.onclick = () => {
+      state.color = c.hex;
+      buildColors();
+      drawIdol();
+      updateScore();
+    };
+    row.appendChild(sw);
+  });
+}
+
+function selectOutfit(category, id, grid, chip) {
+  state[category] = id;
+  grid.querySelectorAll('.outfit-chip').forEach(c => c.classList.remove('selected'));
+  chip.classList.add('selected');
+  drawIdol();
+  updateScore();
+  spawnReaction();
+}
+
+function selectIdol(i) {
+  state.idol = i;
+  const idol = IDOLS[i];
+  // Reset to gender-appropriate defaults
+  if(idol.male) {
+    state.top = 'suit';
+    state.bottom = 'widepants';
+  } else {
+    state.top = 'minidress';
+    state.bottom = 'miniskirt';
+  }
+  state.acc = 'flowers';
+  document.querySelectorAll('.idol-tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.getElementById('idol-name').textContent = idol.name;
+  document.getElementById('idol-group').textContent = idol.group;
+  // Rebuild grids to reflect gender
+  buildGrid(TOPS, 'top-grid', 'top');
+  buildGrid(BOTTOMS, 'bottom-grid', 'bottom');
+  buildGrid(ACCS, 'acc-grid', 'acc');
+  drawIdol();
+  spawnReaction();
+}
+
+// BUILD AUDIENCE
+const audBar = document.getElementById('audience-bar');
+for(let i=0;i<28;i++){
+  const p = document.createElement('div');
+  p.className = 'audience-person audience-flash';
+  p.style.animationDelay = `${Math.random()*2}s`;
+  audBar.appendChild(p);
+}
+
+// SCORE
+function updateScore() {
+  const topItem = TOPS.find(t => t.id === state.top);
+  const botItem = BOTTOMS.find(b => b.id === state.bottom);
+  const accItem = ACCS.find(a => a.id === state.acc);
+  const bonus = (topItem?.scoreBonus||0) + (botItem?.scoreBonus||0) + (accItem?.scoreBonus||0);
+  state.stars = Math.min(5, Math.floor(bonus / 3.5));
+  state.score += bonus;
+  document.getElementById('style-score').textContent = `✦ Style: ${state.score}`;
+  const stars = '★'.repeat(state.stars) + '☆'.repeat(5 - state.stars);
+  document.getElementById('star-display').textContent = stars;
+}
+
+// DRAW IDOL (SVG) — all fills explicit, no SVG inheritance issues
+function drawIdol() {
+  const svg = document.getElementById('idol-svg');
+  const idol = IDOLS[state.idol];
+  const sk = idol.skin;       // explicit skin hex
+  const hr = idol.hair;       // explicit hair hex
+  const col = state.color;
+  const topId = state.top;
+  const botId = state.bottom;
+  const accId = state.acc;
+  const isMale = idol.male;
+
+  const topColor  = col;
+  const topColor2 = lighten(col, 30);
+  const botColor  = darken(col, 20);
+
+  const outfitDetails = {
+    minidress: { topEnd:200, botEnd:280 },
+    hanbok:    { topEnd:190, botEnd:290 },
+    suit:      { topEnd:200, botEnd:280 },
+    bodysuit:  { topEnd:220, botEnd:270 },
+    butterfly: { topEnd:190, botEnd:280 },
+    gown:      { topEnd:180, botEnd:310 },
+  };
+  const od = outfitDetails[topId] || { topEnd:200, botEnd:280 };
+
+  const hairSVG    = getHairSVG(idol.hairStyle, hr, col, sk);
+  const accessory  = getAccessorySVG(accId, col);
+  const outfitBody = getOutfitSVG(topId, botId, topColor, topColor2, botColor, od, sk, isMale);
+
+  // Skin shadow tone
+  const skinShadow = darken(sk, 10);
+  // Lip color — softer for males
+  const lipColor = isMale ? darken(sk, 20) : '#d97070';
+  // Eye color
+  const eyeDark = '#1a0a0a';
+
+  // Shoulder width varies
+  const shoulderL = isMale ? 38 : 44;
+  const shoulderR = isMale ? 92 : 86;
+  const neckW     = isMale ? 18 : 14;
+  const headRx    = isMale ? 28 : 27;
+  const headRy    = isMale ? 32 : 31;
+  const neckX     = isMale ? 56 : 58;
+
+  svg.innerHTML = `
+    <!-- *** HAIR BACK — drawn FIRST so everything sits on top of it *** -->
+    ${hairSVG.back}
+
+    <ellipse cx="65" cy="315" rx="${isMale?38:32}" ry="6" fill="rgba(0,0,0,0.28)"/>
+
+    <!-- Legs -->
+    <rect x="49" y="252" width="${isMale?16:13}" height="58" rx="6" fill="${sk}"/>
+    <rect x="${isMale?67:67}" y="252" width="${isMale?16:13}" height="58" rx="6" fill="${sk}"/>
+    <!-- Shoes -->
+    <ellipse cx="57" cy="311" rx="${isMale?12:10}" ry="5" fill="${darken(col,40)}"/>
+    <ellipse cx="${isMale?75:74}" cy="311" rx="${isMale?12:10}" ry="5" fill="${darken(col,40)}"/>
+
+    <!-- Outfit + body -->
+    ${outfitBody}
+
+    <!-- Arms — drawn with skin color explicitly -->
+    <path d="M ${shoulderL} 148 Q ${isMale?26:28} 190 ${isMale?32:34} 222" stroke="${sk}" stroke-width="${isMale?14:12}" fill="none" stroke-linecap="round"/>
+    <path d="M ${shoulderR} 148 Q ${isMale?104:102} 190 ${isMale?98:96} 222" stroke="${sk}" stroke-width="${isMale?14:12}" fill="none" stroke-linecap="round"/>
+    <!-- Hands -->
+    <ellipse cx="${isMale?32:34}" cy="224" rx="${isMale?9:8}" ry="8" fill="${sk}"/>
+    <ellipse cx="${isMale?98:96}" cy="224" rx="${isMale?9:8}" ry="8" fill="${sk}"/>
+
+    <!-- Neck -->
+    <rect x="${neckX}" y="96" width="${neckW}" height="24" rx="7" fill="${sk}"/>
+
+    <!-- Head — explicit fill, NO inheritance -->
+    <ellipse cx="65" cy="82" rx="${headRx}" ry="${headRy}" fill="${sk}"/>
+
+    <!-- ===== FACE — all fills hardcoded to skin/feature colors ===== -->
+    <!-- Eye whites -->
+    <ellipse cx="53" cy="78" rx="7" ry="5.5" fill="#ffffff"/>
+    <ellipse cx="77" cy="78" rx="7" ry="5.5" fill="#ffffff"/>
+    <!-- Irises -->
+    <ellipse cx="54" cy="79" rx="4.5" ry="4.5" fill="${eyeDark}"/>
+    <ellipse cx="78" cy="79" rx="4.5" ry="4.5" fill="${eyeDark}"/>
+    <!-- Eye shine -->
+    <ellipse cx="55.5" cy="77.5" rx="1.5" ry="1.5" fill="#ffffff"/>
+    <ellipse cx="79.5" cy="77.5" rx="1.5" ry="1.5" fill="#ffffff"/>
+    <!-- Lower eyelid subtle shadow -->
+    <path d="M 47 81 Q 53 84 59 81" stroke="${skinShadow}" stroke-width="0.8" fill="none" opacity="0.5"/>
+    <path d="M 71 81 Q 77 84 83 81" stroke="${skinShadow}" stroke-width="0.8" fill="none" opacity="0.5"/>
+    <!-- Eyebrows — slightly thicker for males -->
+    <path d="M 47 70 Q 54 ${isMale?66:67} 61 70" stroke="${hr}" stroke-width="${isMale?2.5:2}" fill="none" stroke-linecap="round"/>
+    <path d="M 69 70 Q 76 ${isMale?66:67} 83 70" stroke="${hr}" stroke-width="${isMale?2.5:2}" fill="none" stroke-linecap="round"/>
+    <!-- Nose -->
+    <path d="M 63 85 Q 65 91 67 85" stroke="${skinShadow}" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <ellipse cx="62" cy="90" rx="2" ry="1.2" fill="${skinShadow}" opacity="0.4"/>
+    <ellipse cx="68" cy="90" rx="2" ry="1.2" fill="${skinShadow}" opacity="0.4"/>
+    <!-- Mouth -->
+    <path d="M 58 97 Q 65 ${isMale?102:105} 72 97" stroke="${lipColor}" stroke-width="2" fill="none" stroke-linecap="round"/>
+    ${isMale ? '' : `<path d="M 59 97 Q 65 99 71 97" stroke="${lighten(lipColor,20)}" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/>`}
+    <!-- Blush — subtle for males -->
+    <ellipse cx="45" cy="88" rx="8" ry="5" fill="rgba(255,140,140,${isMale?'0.1':'0.2'})"/>
+    <ellipse cx="85" cy="88" rx="8" ry="5" fill="rgba(255,140,140,${isMale?'0.1':'0.2'})"/>
+    <!-- Jawline definition for males -->
+    ${isMale ? `<path d="M 37 90 Q 38 112 65 118 Q 92 112 93 90" stroke="${skinShadow}" stroke-width="1" fill="none" opacity="0.3"/>` : ''}
+
+    <!-- Hair FRONT layer -->
+    ${hairSVG.front}
+
+    <!-- Accessory -->
+    ${accessory}
+  `;
+}
+
+function getHairSVG(style, hairColor, accent, skinColor) {
+  const h = hairColor;
+  const a = accent;
+  const sk = skinColor;
+
+  // All female styles share the same LONG flowing back hair
+  const femaleBack = `
+    <path d="M 37 56 Q 28 120 30 210 Q 38 238 54 234 Q 65 248 76 234 Q 92 238 100 210 Q 102 120 93 56 Q 79 36 65 34 Q 51 36 37 56Z" fill="${h}" opacity="0.97"/>
+    <!-- Side flow panels for extra length/volume -->
+    <path d="M 30 130 Q 24 180 26 230 Q 34 248 40 242 Q 32 210 30 130Z" fill="${h}" opacity="0.85"/>
+    <path d="M 100 130 Q 106 180 104 230 Q 96 248 90 242 Q 98 210 100 130Z" fill="${h}" opacity="0.85"/>`;
+
+  // All male styles share the same SHORT tight back — just a cap hugging the skull
+  const maleBack = `
+    <path d="M 37 62 Q 34 80 36 100 Q 44 118 65 118 Q 86 118 94 100 Q 96 80 93 62 Q 79 40 65 38 Q 51 40 37 62Z" fill="${h}"/>`;
+
+  const styles = {
+    // ── FEMALE ──
+    long: {
+      back: femaleBack,
+      front: `<path d="M 37 58 Q 41 42 65 36 Q 89 42 93 58 Q 82 48 65 46 Q 48 48 37 58Z" fill="${h}"/>
+               <path d="M 37 60 Q 31 74 33 90 Q 37 72 43 66Z" fill="${h}"/>
+               <path d="M 93 60 Q 99 74 97 90 Q 93 72 87 66Z" fill="${h}"/>`
+    },
+    medium: {
+      back: femaleBack,
+      front: `<path d="M 37 58 Q 41 42 65 36 Q 89 42 93 58 Q 82 48 65 46 Q 48 48 37 58Z" fill="${h}"/>
+               <path d="M 37 60 Q 31 78 33 94 Q 37 74 43 68Z" fill="${h}"/>
+               <path d="M 93 60 Q 99 78 97 94 Q 93 74 87 68Z" fill="${h}"/>`
+    },
+    wavy: {
+      back: femaleBack,
+      front: `<path d="M 37 60 Q 65 34 93 60 Q 83 46 65 44 Q 47 46 37 60Z" fill="${h}"/>
+               <path d="M 36 64 Q 27 90 31 114 Q 35 80 43 70Z" fill="${h}"/>
+               <path d="M 94 64 Q 103 90 99 114 Q 95 80 87 70Z" fill="${h}"/>
+               <path d="M 29 160 Q 23 182 27 198 Q 32 172 36 166Z" fill="${h}"/>
+               <path d="M 101 160 Q 107 182 103 198 Q 98 172 94 166Z" fill="${h}"/>`
+    },
+    straight: {
+      back: femaleBack,
+      front: `<rect x="29" y="48" width="72" height="22" rx="10" fill="${h}"/>
+               <rect x="29" y="48" width="72" height="14" rx="7" fill="${h}"/>
+               <rect x="29" y="58" width="9" height="90" rx="4" fill="${h}"/>
+               <rect x="92" y="58" width="9" height="90" rx="4" fill="${h}"/>`
+    },
+    pigtails: {
+      back: femaleBack,
+      front: `<path d="M 37 62 Q 65 36 93 62 Q 80 48 65 46 Q 50 48 37 62Z" fill="${h}"/>
+               <ellipse cx="24" cy="122" rx="14" ry="36" fill="${h}" transform="rotate(-10,24,122)"/>
+               <ellipse cx="106" cy="122" rx="14" ry="36" fill="${h}" transform="rotate(10,106,122)"/>
+               <circle cx="33" cy="88" r="7" fill="${a}" opacity="0.88"/>
+               <circle cx="97" cy="88" r="7" fill="${a}" opacity="0.88"/>`
+    },
+
+    // ── MALE — all share the same short back cap ──
+    m_short: {
+      back: maleBack,
+      front: `<path d="M 37 62 Q 43 44 65 40 Q 87 44 93 62 Q 83 52 65 50 Q 47 52 37 62Z" fill="${h}"/>
+               <path d="M 37 62 Q 34 72 35 80 Q 39 68 43 64Z" fill="${h}"/>
+               <path d="M 93 62 Q 96 72 95 80 Q 91 68 87 64Z" fill="${h}"/>`
+    },
+    m_medium: {
+      back: maleBack,
+      front: `<path d="M 37 60 Q 43 42 65 38 Q 87 42 93 60 Q 83 50 65 48 Q 47 50 37 60Z" fill="${h}"/>
+               <path d="M 37 62 Q 33 76 35 90 Q 39 72 45 66Z" fill="${h}"/>
+               <path d="M 93 62 Q 97 76 95 90 Q 91 72 85 66Z" fill="${h}"/>`
+    },
+    m_wavy: {
+      back: maleBack,
+      front: `<path d="M 37 60 Q 43 42 65 38 Q 87 42 93 60 Q 83 48 65 46 Q 47 48 37 60Z" fill="${h}"/>
+               <path d="M 36 64 Q 29 86 33 104 Q 37 78 43 70Z" fill="${h}"/>
+               <path d="M 94 64 Q 101 86 97 104 Q 93 78 87 70Z" fill="${h}"/>`
+    },
+    m_curtain: {
+      back: maleBack,
+      front: `<path d="M 37 60 Q 43 44 65 40 Q 87 44 93 60 Q 83 50 65 48 Q 47 50 37 60Z" fill="${h}"/>
+               <path d="M 37 60 Q 34 74 36 90 Q 41 74 46 66Z" fill="${h}"/>
+               <path d="M 93 60 Q 96 74 94 90 Q 89 74 84 66Z" fill="${h}"/>
+               <path d="M 62 42 Q 65 49 68 42" stroke="${sk}" stroke-width="1.5" fill="none" opacity="0.4"/>`
+    },
+    m_slick: {
+      back: maleBack,
+      front: `<path d="M 37 56 Q 39 40 65 37 Q 91 40 93 56 Q 81 47 65 46 Q 49 47 37 56Z" fill="${h}"/>
+               <path d="M 38 58 Q 52 50 65 49 Q 78 50 92 58 Q 78 54 65 53 Q 52 54 38 58Z" fill="${darken(h,8)}"/>`
+    },
+  };
+  return styles[style] || styles['m_short'];
+}
+
+function getAccessorySVG(accId, col) {
+  const c = col;
+  const accs = {
+    crown: `<path d="M 45 52 L 50 40 L 57 50 L 65 36 L 73 50 L 80 40 L 85 52 Z" fill="${c}" stroke="${lighten(c,40)}" stroke-width="1"/>
+             <circle cx="57" cy="49" r="3" fill="${lighten(c,40)}"/>
+             <circle cx="65" cy="40" r="3.5" fill="${lighten(c,40)}"/>
+             <circle cx="73" cy="49" r="3" fill="${lighten(c,40)}"/>`,
+    flowers: `<circle cx="52" cy="52" r="7" fill="${c}" opacity="0.85"/>
+               <circle cx="52" cy="52" r="3" fill="white"/>
+               <circle cx="78" cy="55" r="6" fill="${lighten(c,20)}" opacity="0.85"/>
+               <circle cx="78" cy="55" r="2.5" fill="white"/>
+               <circle cx="65" cy="48" r="5" fill="${c}" opacity="0.7"/>
+               <circle cx="65" cy="48" r="2" fill="white"/>`,
+    jewels: `<path d="M 50 72 L 53 65 L 65 68 L 77 65 L 80 72 Q 65 76 50 72Z" fill="${c}" opacity="0.9"/>
+              <ellipse cx="65" cy="69" rx="5" ry="3" fill="${lighten(c,50)}" opacity="0.8"/>`,
+    shades: `<rect x="46" y="74" width="16" height="10" rx="5" fill="#111" opacity="0.9"/>
+              <rect x="68" y="74" width="16" height="10" rx="5" fill="#111" opacity="0.9"/>
+              <line x1="62" y1="79" x2="68" y2="79" stroke="#333" stroke-width="2"/>
+              <line x1="46" y1="79" x2="38" y2="77" stroke="#333" stroke-width="1.5"/>
+              <line x1="84" y1="79" x2="92" y2="77" stroke="#333" stroke-width="1.5"/>`,
+    bow: `<path d="M 53 52 Q 48 46 42 50 Q 48 56 55 52Z" fill="${c}" opacity="0.9"/>
+           <path d="M 77 52 Q 82 46 88 50 Q 82 56 75 52Z" fill="${c}" opacity="0.9"/>
+           <ellipse cx="65" cy="52" rx="6" ry="5" fill="${lighten(c,20)}" opacity="0.9"/>`,
+    starpins: `<text x="44" y="58" font-size="10" fill="${c}">★</text>
+                <text x="75" y="55" font-size="8" fill="${lighten(c,20)}">★</text>
+                <text x="60" y="50" font-size="12" fill="${c}">★</text>`,
+  };
+  return accs[accId] || '';
+}
+
+function getOutfitSVG(topId, botId, col, col2, botCol, od, skin, isMale) {
+  const sk = skin;
+  const outfits = {
+    minidress: `<path d="M ${isMale?42:44} 120 Q ${isMale?36:38} 150 ${isMale?34:36} ${od.topEnd} Q 50 ${od.botEnd} 65 ${od.botEnd-2} Q 80 ${od.botEnd} ${isMale?96:94} ${od.topEnd} Q ${isMale?94:92} 150 ${isMale?88:86} 120 Z" fill="${col}"/>
+                 <path d="M ${isMale?42:44} 120 Q 50 114 65 112 Q 80 114 ${isMale?88:86} 120 Q 78 108 65 106 Q 52 108 ${isMale?42:44} 120Z" fill="${col2}"/>`,
+    hanbok: `<path d="M 42 120 Q 34 160 29 ${od.topEnd} Q 50 ${od.botEnd+10} 65 ${od.botEnd} Q 80 ${od.botEnd+10} 101 ${od.topEnd} Q 106 160 88 120 Z" fill="${col}"/>
+              <path d="M 50 120 Q 58 112 65 111 Q 72 112 80 120 Q 72 116 65 115 Q 58 116 50 120Z" fill="${col2}"/>
+              <path d="M 55 115 L 75 115" stroke="${col2}" stroke-width="3" fill="none"/>`,
+    suit: `<!-- Suit body -->
+            <path d="M 36 118 Q 28 155 26 ${od.topEnd} Q 44 ${od.botEnd-5} 65 ${od.botEnd-8} Q 86 ${od.botEnd-5} 104 ${od.topEnd} Q 102 155 94 118 Z" fill="${col}"/>
+            <!-- Shirt/lapels -->
+            <path d="M 54 118 Q 58 130 65 135 Q 72 130 76 118 Q 70 112 65 111 Q 60 112 54 118Z" fill="${col2}"/>
+            <!-- Left lapel -->
+            <path d="M 36 118 Q 44 130 54 138 Q 50 128 54 118Z" fill="${lighten(col,15)}"/>
+            <!-- Right lapel -->
+            <path d="M 94 118 Q 86 130 76 138 Q 80 128 76 118Z" fill="${lighten(col,15)}"/>
+            <!-- Buttons -->
+            <circle cx="65" cy="148" r="2" fill="${col2}" opacity="0.8"/>
+            <circle cx="65" cy="162" r="2" fill="${col2}" opacity="0.8"/>
+            <circle cx="65" cy="176" r="2" fill="${col2}" opacity="0.8"/>`,
+    bodysuit: `<path d="M 44 120 Q 38 155 40 ${od.topEnd} Q 52 ${od.botEnd} 65 ${od.botEnd-2} Q 78 ${od.botEnd} 90 ${od.topEnd} Q 92 155 86 120 Z" fill="${col}"/>
+                <path d="M 44 120 Q 52 113 65 112 Q 78 113 86 120 Q 78 108 65 107 Q 52 108 44 120Z" fill="${col2}"/>`,
+    butterfly: `<path d="M 42 120 Q 36 155 34 ${od.topEnd} Q 50 ${od.botEnd} 65 ${od.botEnd-2} Q 80 ${od.botEnd} 96 ${od.topEnd} Q 94 155 88 120 Z" fill="${col}"/>
+                 <path d="M 42 120 Q 52 112 65 111 Q 78 112 88 120 Q 78 107 65 106 Q 52 107 42 120Z" fill="${col2}"/>
+                 <path d="M 42 130 Q 24 114 16 136 Q 28 150 44 146Z" fill="${col2}" opacity="0.8"/>
+                 <path d="M 88 130 Q 106 114 114 136 Q 102 150 86 146Z" fill="${col2}" opacity="0.8"/>`,
+    gown: `<path d="M 40 116 Q 26 158 20 ${od.topEnd} Q 30 ${od.botEnd+20} 65 ${od.botEnd+5} Q 100 ${od.botEnd+20} 110 ${od.topEnd} Q 114 158 90 116 Z" fill="${col}"/>
+            <path d="M 40 116 Q 50 110 65 108 Q 80 110 90 116 Q 80 104 65 103 Q 50 104 40 116Z" fill="${col2}"/>
+            <path d="M 33 198 Q 26 230 20 280 Q 50 310 65 308 Q 80 310 110 280 Q 114 230 97 198 Q 80 218 65 216 Q 50 218 33 198Z" fill="${darken(col,10)}" opacity="0.9"/>`,
+  };
+
+  const bottoms = {
+    miniskirt: ``,
+    widepants: `<path d="M 40 ${od.topEnd} Q 34 ${od.topEnd+32} 32 282 L 58 282 Q 60 ${od.topEnd+16} 65 ${od.topEnd+10} Q 70 ${od.topEnd+16} 72 282 L 98 282 Q 96 ${od.topEnd+32} 90 ${od.topEnd} Z" fill="${botCol}"/>`,
+    floralskirt: `<path d="M 36 ${od.topEnd} Q 26 ${od.topEnd+42} 28 292 Q 50 302 65 300 Q 80 302 102 292 Q 104 ${od.topEnd+42} 94 ${od.topEnd} Z" fill="${botCol}"/>
+                   <circle cx="50" cy="${od.topEnd+42}" r="5" fill="${col2}" opacity="0.5"/>
+                   <circle cx="65" cy="${od.topEnd+58}" r="6" fill="${col}" opacity="0.4"/>
+                   <circle cx="80" cy="${od.topEnd+36}" r="4" fill="${col2}" opacity="0.5"/>`,
+    leather: `<path d="M 42 ${od.topEnd} Q 38 ${od.topEnd+22} 38 282 L 60 282 Q 62 ${od.topEnd+12} 65 ${od.topEnd+6} Q 68 ${od.topEnd+12} 70 282 L 92 282 Q 92 ${od.topEnd+22} 88 ${od.topEnd} Z" fill="${darken(botCol,30)}"/>`,
+    maxiskirt: `<path d="M 36 ${od.topEnd} Q 24 ${od.topEnd+62} 22 308 Q 50 320 65 318 Q 80 320 108 308 Q 106 ${od.topEnd+62} 94 ${od.topEnd} Z" fill="${botCol}"/>`,
+    cargo: `<path d="M 42 ${od.topEnd} Q 38 ${od.topEnd+24} 38 282 L 60 282 Q 62 ${od.topEnd+12} 65 ${od.topEnd+6} Q 68 ${od.topEnd+12} 70 282 L 92 282 Q 92 ${od.topEnd+24} 88 ${od.topEnd} Z" fill="${botCol}"/>
+             <!-- Cargo pockets -->
+             <rect x="40" y="${od.topEnd+30}" width="16" height="18" rx="3" fill="${darken(botCol,12)}" opacity="0.8"/>
+             <rect x="74" y="${od.topEnd+30}" width="16" height="18" rx="3" fill="${darken(botCol,12)}" opacity="0.8"/>`,
+  };
+
+  return (outfits[topId] || outfits['bodysuit']) + (bottoms[botId] || '');
+}
+
+// HELPERS
+function lighten(hex, pct) {
+  let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,r+pct*2.5|0); g=Math.min(255,g+pct*2.5|0); b=Math.min(255,b+pct*2.5|0);
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
+function darken(hex, pct) {
+  let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  r=Math.max(0,r-pct*2|0); g=Math.max(0,g-pct*2|0); b=Math.max(0,b-pct*2|0);
+  return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
+}
+
+// WALK
+let walkInterval = null;
+function toggleWalk() {
+  const fig = document.getElementById('idol-figure');
+  const btn = document.getElementById('walk-btn');
+  state.walking = !state.walking;
+  if(state.walking){
+    fig.classList.add('walking');
+    btn.textContent = '⏹ Stop Walking';
+    updateScore();
+  } else {
+    fig.classList.remove('walking');
+    btn.textContent = '▶ Walk the Runway';
+  }
+}
+
+function spinIdol() {
+  const fig = document.getElementById('idol-figure');
+  fig.style.transform = 'scaleX(-1)';
+  spawnReaction();
+  setTimeout(() => { fig.style.transform = 'scaleX(1)'; }, 600);
+  updateScore();
+}
+
+function spawnReaction() {
+  const runway = document.getElementById('runway');
+  const reactions = ['💖','✨','⭐','🌸','💫','🎉','💎','👑','🌟','💕'];
+  const r = document.createElement('div');
+  r.className = 'reaction';
+  r.textContent = reactions[Math.floor(Math.random()*reactions.length)];
+  r.style.left = (80 + Math.random()*180) + 'px';
+  r.style.bottom = (100 + Math.random()*200) + 'px';
+  runway.appendChild(r);
+  setTimeout(() => r.remove(), 1600);
+}
+
+// PHOTO
+function takePhoto() {
+  const flash = document.getElementById('flash-overlay');
+  flash.classList.add('flash');
+  setTimeout(() => flash.classList.remove('flash'), 600);
+
+  // Capture current state into a gallery entry
+  state.photoCount++;
+  document.getElementById('photo-count').textContent = `📷 ${state.photoCount} Photos`;
+
+  const idol = IDOLS[state.idol];
+  const topItem = TOPS.find(t => t.id === state.top);
+  const accItem = ACCS.find(a => a.id === state.acc);
+
+  addToGallery({
+    idol: idol.name,
+    group: idol.group,
+    outfit: topItem?.emoji + ' ' + accItem?.emoji,
+    color: state.color,
+    score: state.stars,
+    svgContent: document.getElementById('idol-svg').outerHTML,
+  });
+
+  spawnReaction();
+  updateScore();
+}
+
+function addToGallery(snapshot) {
+  const grid = document.getElementById('gallery-grid');
+  const empty = grid.querySelector('.gallery-empty');
+  if(empty) empty.remove();
+
+  const thumb = document.createElement('div');
+  thumb.className = 'gallery-thumb';
+  thumb.innerHTML = `
+    <div style="width:100%;height:calc(100% - 22px);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,${snapshot.color}22,#1a1a2e);overflow:hidden;padding:4px">
+      <div style="transform:scale(0.6);transform-origin:top center;width:130px">
+        ${snapshot.svgContent}
+      </div>
+    </div>
+    <div class="photo-label">${snapshot.idol} ${'★'.repeat(snapshot.score)}</div>
+  `;
+  grid.appendChild(thumb);
+}
+
+// INIT
+function init() {
+  buildGrid(TOPS, 'top-grid', 'top');
+  buildGrid(BOTTOMS, 'bottom-grid', 'bottom');
+  buildGrid(ACCS, 'acc-grid', 'acc');
+  buildColors();
+  drawIdol();
+  updateScore();
+
+  // Auto reactions
+  setInterval(() => {
+    if(state.walking) spawnReaction();
+  }, 1200);
+}
+
+init();
+</script>
+</body>
+</html>
