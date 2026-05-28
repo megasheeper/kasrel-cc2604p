@@ -1,6 +1,7 @@
 Using SunoAI and grok to generate a script, i manage to make a prompt to put into SunoAI
 
 For number 1. Title of the song is Runway Magic
+For number 2. Title of the song is Velvet Venom
 
 
 
@@ -99,3 +100,54 @@ NewJeans x CORTIS… we made it right ✨
 
 
 
+2) can u write a script for suno ai for a kpop song that works in a fashion show or an event. Make it your own lyrics and i want it to be upbringing, fast-paced electric and many people will enjoy it
+
+
+Suno AI Prompt Settings
+Style of Music: Fast-paced K-Pop, electropop, runway fashion show, high-energy, heavy side-chain compression, 128 BPM, massive supersaw synths, punchy 909 kick, confident female vocals, futuristic glitch textures
+
+Title: Neon Heartbeat (or Velvet Venom)
+
+I told ai to change the lyrics to Korean so it would be
+
+[Intro]
+(Ooh yeah) 날 봐, spotlight
+(Ready for the show, let's go)
+(Fast, bubbling arpeggiated synths build up)
+
+[Verse 1]
+그림자 아닌, 내가 바로 main event
+완벽한 실루엣, 모두가 감탄해
+베일에 싸인 차가운 눈빛으로
+세상의 시선을 단숨에 사로잡아
+
+[Pre-Chorus]
+(Beat starts to pump, rising tension)
+터지는 플래시, 눈이 멀어버릴 듯해
+거침없는 발걸음, 새로운 길을 내
+화려한 불빛 아래, we ignite
+시간을 멈춰, 이 밤은 우리의 것!
+
+[Chorus]
+(Explosive bass drop, massive supersaw synths)
+네온 하트비트, 온몸에 퍼져가
+한계를 넘어, 모든 걸 깨워봐
+발걸음마다 터지는 SHOCKWAVE, FEEL THE BASS
+여긴 나의 왕국, WATCH ME RUN THE SHOW!
+네온 하트비트 (Yeah) 네온 하트비트 (Oh)
+이 순간을 느껴봐, FEEL THAT NEON HEARTBEAT
+RUNWAY QUEEN, 빛나는 MY WORLD, 네온 하트비트!
+
+[Rap Verse]
+(Glitchy vocal chops, gritty delivery)
+스타일은 완벽, 걸음걸이는 더 당당하게
+두려움 따윈 없어, 거침없이 직진해
+압구정에서 파리까지, 경계를 넘어서
+모든 각도에서 난 완벽하게 빛나
+Yeah, I got that, I got that 네온 하트비트!
+
+[Outro]
+마지막 강렬한 한 걸음, 카메라 close-up
+우리가 지배하는 밤, 더 높이 올라가
+(Soaring vocal ad-lib)
+네온 하트비트... fade out.
